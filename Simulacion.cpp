@@ -88,6 +88,16 @@ int seleccionar(int s[], int u, int x)
 	
 }
 
+int maximo(int s[], int u)
+{
+	int max=s[0];
+	for(int k=1;k<u;k++)
+	{
+		if(s[k]>max){max=s[k];}	
+	}
+	return max;
+}
+
 /*Función principal del programa*/
 int main(void)
 {
