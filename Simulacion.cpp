@@ -116,6 +116,17 @@ int main(void)
 	for(int i=1;i<N;i++){s[i]=0;}  //Las casillas sobrantes se llenan con 0
 	int u = 1;                     //Número de unidades 1<= u <= N
 	int sj=0;					   //Variable auxiliar. Se usa cuando hay fragmentación.
+	bool coalision = true;         //Determina si se hace una coalision (true) o fragmentación (false).
+	int x;    					   //Variable para guardar un número aleatorio tipo int
+	double y = 0;				   //Variable para guardar un número aleatorio tipo double
+	int unidad = 1;				   //Variable para guardar la unidad seleccionada
+	int unidad2= 1;				   //Variable para guardar la segunda unidad seleccionada (en el caso coalisión)
+	int cantidad;				   //Variable donde se guarda la cantidad de unidades con determinada fuerza (Parte 6)
+	int funcion[N];				   //Vector donde se guardan los datos de salida (En enteros).
+	for(int i=0;i<N;i++){funcion[i]=0;}  //Las casillas sobrantes se llenan con 0
+	funcion[N-1]=1; 				     //Inicialmente existe una unidad con fuerza N
+	int fuerza_max;						 //Vector donde se guarda la fuerza máxima (Parte 6)
+	
 	
 	return 0;
 }
