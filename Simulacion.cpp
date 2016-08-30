@@ -1,5 +1,9 @@
 #include <iostream>
 #include <cstdio>
+#include <cstdlib>
+#include <ctime>
+#include <cmath>
+#include <fstream>
 
 using namespace std;
 
@@ -14,7 +18,11 @@ sum_{i=1}^{N}s(i) = sum_{i=1}^{u}s(i) = N
 *** *** *** *** *** *** *** *** *** *** *** *** *** *** 
 */
 
-
+/* Función para fragmentar una unidad
+s[] = Vector de fuerza del ejercito
+u = número de unidades   1 <= u <= N
+j = unidad que se quiere fragmentar   1 <= j <= u
+*/
 int fragmentar(int s[], int u, int j)
 {
 	int sj = s[j-1];
@@ -26,18 +34,50 @@ int fragmentar(int s[], int u, int j)
 	return *s;
 }
 
+/* Función para coalisionar dos unidades
+s[] = Vector de fuerza del ejercito
+N = Total de fuerza de ataque del ejercito
+u = número de unidades   1 <= u <= N
+j1, j2 = unidad que se quiere fragmentar   1 <= j1, j2 <= u
+j1 y j2 DEBEN ser diferentes
+*/
+int coalisionar(int s[], int N, int u, int j1, int j2)
+{
+	if(j1>j2)
+	{
+		int aux = j1;
+		j1 = j2;
+		j2 = aux;
+	}
+	//Siempre j2 > j1
+	
+	s[j1-1]=s[j1-1]+s[j2-1];
+	
+	for(int ind=j2; ind <= u;ind++)
+	{
+		s[ind-1]=s[ind];
+	}
+	if(u==N)
+	{
+		s[u-1]=0;
+	}
+	return *s;
+}
+
+/*Función principal del programa*/
 int main(void)
 {
 	/* *** *** Entradas del programa *** *** */
-	int N = 100;                   //Total de fuerza de ataque del ejercito
+	int N = 10000;                   //Total de fuerza de ataque del ejercito
 	double nu = 0.01;              //Probabilidad de que la unidad se fragmente
-	int Num_iteraciones =1000;     //Se define el número de iteraciones
+	int Num_iteraciones =20000;     //Se define el número de iteraciones
 		
 	/* *** *** Definición de variables *** *** */
 	int s[N];					   //Vector de fuerza
 	s[0] = N;					   //Valor inicial como un ejercito unido
 	for(int i=1;i<N;i++){s[i]=0;}  //Las casillas sobrantes se llenan con 0
 	int u = 1;                     //Número de unidades 1<= u <= N
+	int sj=0;					   //Variable auxiliar. Se usa cuando hay fragmentación.
 	
 	return 0;
 }
