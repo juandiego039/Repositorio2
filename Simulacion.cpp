@@ -126,6 +126,8 @@ int main(void)
 	for(int i=0;i<N;i++){funcion[i]=0;}  //Las casillas sobrantes se llenan con 0
 	funcion[N-1]=1; 				     //Inicialmente existe una unidad con fuerza N
 	int fuerza_max;						 //Vector donde se guarda la fuerza máxima (Parte 6)
+	srand(time(NULL));    			     //Semilla aleatoria para la función rand()
+	
 	
 	
 	return 0;
