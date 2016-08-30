@@ -64,6 +64,30 @@ int coalisionar(int s[], int N, int u, int j1, int j2)
 	return *s;
 }
 
+/*Función que selecciona una unidad. La selección se hace proporcional a su fuerza.
+s[] = Vector de fuerza del ejercito
+u = número de unidades   1 <= u <= N
+x = número aleatorio 1 <= x <= N
+*/
+int seleccionar(int s[], int u, int x)
+{
+	int suma =0;
+	int suma_m=0;
+	int unidad_seleccionada = 0;
+	for(int ind=1;ind<=u;ind++)
+	{
+		suma_m = suma + s[ind-1];
+		if(suma<x && x<=suma_m)
+		{
+			unidad_seleccionada = ind;
+			break;
+		}
+		suma = suma_m;
+	}
+	return unidad_seleccionada;
+	
+}
+
 /*Función principal del programa*/
 int main(void)
 {
