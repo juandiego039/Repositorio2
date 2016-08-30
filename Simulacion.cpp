@@ -1,6 +1,19 @@
 #include <iostream>
 #include <cstdio>
 
+using namespace std;
+
+/*
+*** *** *** *** *** *** *** *** *** *** *** *** *** *** 
+Definición de Variables:
+    1  2  3      u         N
+s=[s1,s2,s3,...,su,0,0,...,0]  -> vector de tamaño N
+u representa el número de unidades
+sum_{i=1}^{N}s(i) = sum_{i=1}^{u}s(i) = N
+
+*** *** *** *** *** *** *** *** *** *** *** *** *** *** 
+*/
+
 
 int fragmentar(int s[], int u, int j)
 {
