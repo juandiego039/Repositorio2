@@ -88,6 +88,10 @@ int seleccionar(int s[], int u, int x)
 	
 }
 
+/*Función que encuentra el máximo de un vector.
+s[] = Vector de fuerza del ejercito
+u = número de unidades   1 <= u <= N
+*/
 int maximo(int s[], int u)
 {
 	int max=s[0];
