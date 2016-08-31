@@ -127,9 +127,9 @@ int main(void)
 	int fuerza_max;						 //Vector donde se guarda la fuerza máxima (Parte 6)
     srand(time(NULL));    			     //Semilla aleatoria para la función rand()
     
-    printf ("Total de fuerza: N=%d\n",N);
-    printf ("Total de iteraciones: %d\n",Num_iteraciones);
+    printf ("\nTotal de fuerza: N=%d\n",N);
     printf ("Probabilidad de fragmentaci\242n: %lf\n",nu);
+    printf ("Total de iteraciones: %d\n\n",Num_iteraciones);
     
     /* Inicio de las iteraciones */
     for(int iteracion=1;iteracion<=Num_iteraciones;iteracion++)
@@ -210,14 +210,14 @@ int main(void)
 			}
 		}
 	}
-	printf ("Se realizaron %d iteraciones.\nEl tama\xA4o del ejercito es %d.\n\n",Num_iteraciones,N);
+	printf ("Se realizaron todas las %d iteraciones.\n\n",Num_iteraciones);
 	
 	//7 - Guardar Datos en un archivo.
 	ofstream fs("Datos.txt");	  //Crea un archivo en donde se van a guardar los datos
 	double F;				 	  //Log de la fuerza (F)
 	double T;                 	  //Log del número de unidades con fuerza F
 	
-	printf("Se muestran los primeros 15 valores.\n");
+	printf("Se muestran los primeros 15 valores:\n");
 	printf("log(Fuerza)\t\tlog(Num. de Unidades)\n");
 	for(int fuerza=1;fuerza<=N;fuerza++)
 	{
