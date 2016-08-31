@@ -131,7 +131,7 @@ int main(void)
     /* Inicio de las iteraciones */
     for(int iteracion=1;iteracion<=Num_iteraciones;iteracion++)
 	{
-		printf ("Iteracion: %d\r",iteracion);
+		printf ("Iteraci\242n: %d\r",iteracion);
 		//1 - Se selecciona una unidad
     	x = 1 + rand()%N;                    //Genera un número entre 1 y N
 		unidad = seleccionar(s, u, x);
