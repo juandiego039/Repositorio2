@@ -10,9 +10,10 @@
 \usepackage{subfigure}
 \usepackage{amsmath}
 \renewcommand{\captionlabeldelim}{.}
+\newcommand{\comillas}[1]{``#1"}
 
 %%%%%%%%%%% TITULO DEL ARTICULO (Los títulos, resúmenes y palabras clave se organizan dependiendo del idioma en el que se escriba el artículo. Entonces, si el artículo se escribe en español se debe colocar primero el título en español y luego en inglés. Si el artículo se escribe en inglés se coloca primero el título en inglés y luego en español. Así mismo para el resumen y palabras clave)
-\title{SIMULACIÓN GUERRA DE GUERRILLAS}
+\title{RELACIÓN DE LA PROBABILIDAD DE FRAGMENTACIÓN Y EL NÚMERO DE UNIDADES DE ATAQUE EN UNA SIMULACIÓN DE GUERRA DE GUERRILLAS}
 
 %%%%%%%%%%% AUTORES DEL ARTICULO
 \author{Juan Diego Rojas Zambrano\suprm1}
@@ -36,6 +37,7 @@
 
 %%%%%%%%%%% PAGINA EN QUE COMIENZA EL ARTICULO (RESERVADO PARA EL EDITOR)
 \setcounter{page}{1}
+\renewcommand{\tablename}{Tabla}
 
 %%%%%%%%%% Estilo de la bibliografia segun la American Physics Society
 \bibliographystyle{apsrev4-1}
@@ -44,48 +46,287 @@
 
 %%%%%%%%%%% RESUMEN DE SU ARTICULO EN ESPAÑOL
 \begin{resumen}
-\noindent Escribir resumen en español.
+\noindent El presente trabajo describe la implementación de un algoritmo que caracteriza la dinámica de fragmentación y coalición de una fuerza insurgente. Se estudia a través de simulaciones la relación entre la probabilidad de fragmentación y el número de unidades de ataque. Los resultados muestran que el número de unidades de ataque decrece con la probabilidad de fragmentación. Cuantitativamente se desarrolla un modelo exponencial para describir este comportamiento.
 \end{resumen}
 
 %%%%%%%%%%% PALABRAS CLAVE DE SU ARTICULO EN ESPAÑOL
-\keywords{Palabras clave en español.}
+\keywords{Simulación, algoritmo, guerra.}
 
-%%%%%%%%%%% RESUMEN DE SU ARTICULO EN INGLÉS
-%\begin{ingles}
-%\noindent Escribir resumen en inglés
-%\end{ingles}
-%%%%%%%%%%% PALABRAS CLAVE DE SU ARTICULO EN INGLÉS
-%\ikeywords{Palabras clave en inglés.}
 
-%%%%%%%%%%% CUERPO DEL DOCUMENTO
-% El texto debe dividirse en secciones, cada una con un encabezado (por ejemplo: Introducción; Parte Experimental, Materiales y Métodos o Desarrollo teórico; Resultados; Discusión; Conclusiones). Se recomienda que estas secciones sean breves y equilibradas.
-\subsection*{Introducción}
+\section{Introducción}
 
-\noindent Comienzo del cuerpo del artículo.\\
+\noindent En \cite{un1} y \cite{un2} se describen ciertos patrones que subyacen en guerras y hechos de terrorismo que ocurren en el mundo, aún cuando los conflictos están separados geográficamente. Se describe que una fuerza insurgente tiene una fuerza de ataque $N$ total, la cual se reparte en varias unidades de ataque, las cuales poseen una dinámica de coalición y fragmentación. Entonces las distintas unidades de ataque poseerán diferentes cantidades de fuerza de ataque dependiendo de esta dinámica. La característica que se estudia es la relación exponencial entre el número de unidades de ataque $n_s$ con una fuerza $s$, y la fuerza de ataque $s$. Esta relación posee varios parámetros, entre los cuales está la probabilidad de fragmentación de una unidad $\nu$. La dinámica de las unidades de ataque viene determinada por el siguiente algoritmo \cite{un1}: 
 
-%\noindent Las referencias citadas aquí son ejemplos de cómo se debe referenciar un artículo \cite{1}, un libro \cite{2}, una conferencia \cite{3}, una página web \cite{4} y memorias de congreso \cite{5}. \\
+\begin{enumerate}
+  \item Seleccionar una unidad de ataque $i$ aleatoriamente, con probabilidad probabilidad proporcional a su fuerza de ataque $s_i$.
+  \item Determinar con probabilidad $\nu$, si se fragmenta la unidad $i$ seleccionada.
+    \subitem 2.1 Si hay coalición (no hay fragmentación), se selecciona una unidad de ataque $j$ con probabilidad proporcional a su fuerza de ataque.
+    \subitem 2.2 Realizar la coalición de las unidades $i$ y $j$ e ir al paso 3.
+    \subitem 2.3 Si hay fragmentación, se fragmenta la unidad $i$ en $s_i$ unidades de fuerza de ataque 1.
+  \item Repetir los pasos 1 y 2.
+  \item Calcular la distribución $n_s$ vs. $s$.
+\end{enumerate}
 
-%\noindent Las figuras deben tener buena resolución (mínimo 300 pixeles por pulgada) en escala de grises o a color de ser estrictamente necesario.  Al graficar diferentes series de datos usar en lo posible diferentes símbolos (marcadores de datos en excel), como se muestra en la fig. \ref{figura1}.
+Este trabajo tiene como objetivo estudiar la relación entre $\nu$, $s$ y $n_s$, cuando se tiene una fuerza insurgente con total de fuerza $N=10000$.
 
-%\begin{figure}
-%\begin{center}
-%\includegraphics[width=7cm]{figura1.jpg}
-%\end{center}
-%\caption{\itshape Ejemplo figura.}
-%\label{figura1}
-%\end{figure}
+\section{Implementación}
 
-\noindent - Unidades, abreviaturas y símbolos: Se usará el Sistema Internacional de Unidades (m, kg, s, K), empleando sólo términos aceptados generalmente. Es necesario explicar las abreviaturas desconocidas cuando se usen por primera vez. Se debe poner especial cuidado al escribir los símbolos para que sean identificados claramente. En casos especiales, se especificará directamente con el autor el uso de fórmulas, caracteres especiales u otros.
+\noindent Para implementar el algoritmo, se describe primero las ideas generales para la descripción de la guerrilla y posteriormente se describe detalladamente los pasos más importantes del algoritmo.
 
-%%%%Otras secciones pueden ser incluidas usando el comando subsection
+\subsection{Idea general de la implementación}
 
-\subsection*{Conclusiones}
-Conclusiones del artículo
+\noindent Para realizar la implementación del algoritmo, se describe la guerrilla con un vector $\vec{s}$ de $N$ componentes, de tal forma que cada componente $(i)$ represente una unidad de ataque, y el valor de esa componente $(s_i)$ represente la fuerza de ataque de la unidad de ataque $i$. De esta forma, si la fuerza total de la guerrilla es $N=10$, y está conformada por 4 unidades, una descripción de esta guerrilla sería:
+\begin{displaymath}
+ \vec{s} = (3, 2, 1, 4, 0, 0, 0, 0, 0, 0, 0)
+\end{displaymath}
 
-%- Si se requieren agradecimientos, reconocimientos a entidades, permisos de publicación, etc., irán al terminar el texto y antes de las Referencias bibliográficas.
+\noindent En este caso, la unidad 1 tiene fuerza 3, la unidad 2 tiene fuerza 2, la unidad 3 tiene fuerza 1, y la unidad 4 tiene fuerza 4. Las demás componentes son 0 porque no existes más unidades. Claramente se debe cumplir que la suma de los valores de todas las componentes es $N$. Para este ejemplo: $3+2+4+1=10$.\\
 
-%archivo tipo bib donde se encuentran las referencias
-%\bibliography{bibfile}
+\noindent Ahora supongamos que la unidad 1 (con fuerza igual a $s_i=3$) se va a fragmentar. De acuerdo al paso 2.3, se crearán 3 unidades de fuerza 1, por lo que después de la fragmentación el vector queda de la siguiente forma:
+\begin{displaymath}
+ \vec{s} = (1, 2, 1, 4, 1, 1, 0, 0, 0, 0, 0)
+\end{displaymath}
+
+\noindent Por convención, se irán completando las componentes de $\vec{s}$ hacia la derecha, es decir, $\vec{s}$ siempre tendrá una cola de ceros. Ahora supongamos que se van a coalicionar las unidades 2 y 3. El vector resultante será
+\begin{displaymath}
+ \vec{s} = (1, 3, 4, 1, 1, 0, 0, 0, 0, 0, 0)
+\end{displaymath}
+
+\noindent Cumpliendo con la convención descrita, la nueva unidad quedará ubicada en la posición de la unidad con el menor índice. Por las características del problema, no se puede tener coalición de una unidad consigo misma. Nótese que las posiciones de las demás unidades se corren para tener la cola de ceros.\\
+
+\noindent Por lo anterior, sí la guerrilla está formada por una unidad se tiene
+\begin{displaymath}
+ \vec{s}_{0} = (10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+\end{displaymath}
+
+\noindent Y por lo tanto, con el número máximo de unidades, se tendrá
+\begin{displaymath}
+ \vec{s}_{1} = (1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+\end{displaymath}
+
+\noindent De esta forma, y de acuerdo algoritmo descrito, la configuración $\vec{s}_{0}$ siempre cambia a la configuración $\vec{s}_{1}$.
+
+\subsection{Descripción de la coalición y la fragmentación}
+
+\noindent En general, el vector $\vec{s}$ es de la forma
+\begin{displaymath}
+ \vec{s} = (s_1, s_2, s_3, ..., s_u, 0, 0, ...)
+\end{displaymath}
+
+\noindent Donde $u$ es el número de unidades. De esta forma, se cumple
+\begin{displaymath}
+  \sum_{i=1}^{N} s_i = \sum_{i=1}^{u} s_i = N
+\end{displaymath}
+
+\noindent Por el algoritmo, conviene tener dos funciones que realicen la coalición y la fragmentación de las unidades respectivamente. Si se quiere hacer la fragmentación de la unidad $i$, desde la configuración
+\begin{displaymath}
+ \vec{s} = (s_1, s_2, s_3, ..., s_i, ..., s_u, 0, 0, ...)
+\end{displaymath}
+
+\noindent Entonces los pasos a seguir son:
+\begin{enumerate}
+  \item Guardar el valor de $s_i$, por ejemplo $k=s_i$.
+  \item Asignar $\vec{s}_i = 1$. En este punto se tiene
+\begin{displaymath}
+  \vec{s} = (s_1, s_2, s_3, ..., \underbrace{1}_{\hbox{\small{posición} }i}, ..., s_u, 0, 0, ...)
+\end{displaymath}
+
+  \item Asignar, a partir de la posición $u+1$ y hasta $k-1$ posiciones después, los valores de 1. Entonces se tiene
+\begin{displaymath}
+  \vec{s} = (s_1, s_2, s_3, ..., 1, ..., s_u, \underbrace{1, ..., 1}_{k-1 \hbox{\small{ posiciones}}}, 0, 0, ...)
+\end{displaymath}
+\end{enumerate}
+
+\noindent Por otra parte, si se quiere hacer la coalición de las unidades $i$ y $j$, desde la configuración
+\begin{displaymath}
+ \vec{s} = (s_1, s_2, s_3, ..., s_i, ..., s_j, ..., s_u, 0, 0, ...)
+\end{displaymath}
+
+\noindent Entonces los pasos a seguir son:
+\begin{enumerate}
+  \item Si $i>j$, asignar a $i$ con el valor de $j$ y a $j$ con el valor de $i$.
+  \item Asignar a la posición $i$, el valor $s_i+s_j$. El vector queda
+  \begin{displaymath}
+ \vec{s} = (s_1, s_2, s_3, ..., s_i+s_j, ..., s_j, ..., s_{u-1}, s_u, 0, 0, ...)
+  \end{displaymath}
+  \item A partir de la posición $j$ y hasta la posición $u$, asignar los valores de las posiciones siguientes. El vector queda
+  \begin{displaymath}
+ \vec{s} = (s_1, s_2, s_3, ..., s_i+s_j, ..., s_{j+1}, ..., s_u, 0, 0, 0, ...)
+  \end{displaymath}
+  \item Si el número de unidades es el máximo $u=N$, esto es, si se tenia inicialmente la configuración $\vec{s}_{1}$, se asigna a la última posición un 0.
+\end{enumerate}
+
+\noindent Nótense que el primer paso se realiza para siempre tener $i<j$ y poder aplicar los demás pasos sin pérdida de generalidad.
+
+\subsection{Descripción de la selección de la unidad}
+
+\noindent El último paso importante es la selección de la unidad. Como la selección de la unidad se debe realizar proporcional a su fuerza, entonces este paso no es sencillo y en el código se realiza una función para esto. Se empieza con un número aleatorio $x$ entre 1 y $N$. Se supone que $x$ se escoge con distribución uniforme, es decir, todos los valores entre 1 y $N$ tienen igual opción de ser escogidos. Si la unidad $i$ tiene fuerza $s_i$, entonces convenimos en que la probabilidad de que sea escogida $i$ es $s_i/N$. Esto cumple con el criterio de que la probabilidad de selección es proporcional a la fuerza. De esta forma, el vector $\vec{s}/N$ puede entenderse como un vector de distribución de probabilidades. Sin embargo, no se va a trabajar con el vector $\vec{s}/N$ sino con el vector $\vec{s}$ directamente por simplicidad en la implementación teniendo en cuenta que la expresión
+\begin{displaymath}
+  d(i) = \sum_{k=1}^{i}\frac{s_k}{N}
+\end{displaymath}
+
+representa la probabilidad de seleccionar una unidad con índice menor a $i$. Luego, la probabilidad de escoger la unidad $i$ es
+\begin{displaymath}
+  p(i) = d(i) - d(i-1)
+\end{displaymath}
+
+\noindent Donde se debe definir $d(0)=0$. Si se escoge un número $y$ entre 0 y 1, y ese número esta entre $d(i)$ y $d(i-1)$, es decir, si cayo en el intervalo asignado a la unidad $i$, entonces se escoge la unidad $i$. Esto es
+\begin{displaymath}
+  \hbox{Si } y\in(d(i),d(i-1)]\hbox{, entonces se selecciona la unidad }i
+\end{displaymath}
+
+\noindent Multiplicando el criterio por $N$:
+\begin{displaymath}
+  \hbox{Si } x\in\left(\sum_{k=1}^{i}s_k,\sum_{k=1}^{i-1}s_k\right]\hbox{, entonces se selecciona la unidad }i
+\end{displaymath}
+
+\noindent Entonces, los pasos para seleccionar la unidad son:
+\begin{enumerate}
+  \item Escoger un número $x$ con distribución uniforme entre 1 y $N$. Se crean dos variables $a=0$ y $b=0$, y se inicializa un contador: $k=1$.
+  \item Se asigna $b=a+s_k$.
+  \item Si $a<x\leq b$, entonces ir al paso 5. Si no, ir al paso 4.
+  \item Hacer $a=b$ e ir al paso 2.
+  \item La unidad seleccionada es la $k$.
+\end{enumerate}
+
+\section{Resultados y análisis}
+
+\noindent Se realizaron simulaciones con $N=10000$, para 10 valores diferentes de $\nu$. Los resultados se muestran en el apéndice. Todas las simulaciones se realizaron en un sistema operativo de 64 bits Intel(R) Core(TM) i3-4160 CPU a 3.60 GHz. Los tiempos de simulación varían entre 15 segundos (con $\nu=0.9$) y 120 segundos (con $\nu=0.01$). La condición inicial de la simulación es
+\begin{displaymath}
+  \vec{s} = (10000, 0, 0, 0, 0, ...)
+\end{displaymath}
+
+\noindent Los datos muestran que $\log(n_s)$ y $\log(s)$ se relacionan linealmente, por lo tanto, los datos se ajustan a la ecuación
+\begin{displaymath}
+\log(n_s)= \alpha\log(s) + b
+\end{displaymath}
+
+\noindent Luego
+\begin{displaymath}
+n_s= 10^{b}s^{\alpha}
+\end{displaymath}
+
+\noindent El parámetro $b$ varia entre el rango $3.8\pm0.3$. Se considerará por lo tanto que $b$ es aproximadamente constante, y la ecuación toma la forma
+\begin{displaymath}
+n_s= 3800s^{\alpha}
+\end{displaymath}
+
+\noindent La figura \ref{AlphavsNu} presenta el ajuste (de segundo orden) entre $\nu$ y $\alpha$ para los casos estudiados. La ecuación que se obtiene es
+\begin{displaymath}
+  -\alpha = 1.21\nu^2+0.43\nu+2.18
+\end{displaymath}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{AlphavsNu.png}
+\end{center}
+\caption{\itshape Comparación entre $\alpha$ y $\nu$. La curva tiene ecuación $y=1.21x^2+0.43x+2.18$ y ajusta con $R^2=0.996$.}
+\label{AlphavsNu}
+\end{figure}
+
+\noindent Entonces, un modelo para la cantidad de unidades ($n_s$) en función de su fuerza de ataque ($s$) es:
+\begin{equation}\label{modelo}
+n_s(s,\nu)= 3800s^{-(1.21\nu^2+0.43\nu+2.18)}
+\end{equation}
+
+Esto muestra que la cantidad de unidades decrece con la probabilidad de fragmentación y aumenta con la fuerza de ataque $s$.
+
+\section{Conclusiones}
+
+Los resultados obtenidos muestran que el parámetro $\alpha$ se relaciona cuadráticamente con la probabilidad de fragmentación $\nu$. Por lo tanto el número de unidades de ataque decrece con $\nu$. Esto está de acuerdo con la intuición en el modelo descrito, pues si es más probable que una unidad de fuerza $s$ se fragmente, entonces deben hacer pocas de ellas. Por otra parte, el método descrito no solamente funciona para $N=10000$. De forma análoga puede emplearse para distintos valores de $N$.
+
+\begin{thebibliography}{99}
+
+\bibitem{un1} N. F. Johnson \textit{et. al.}, \comillas{Universal patterns underlying ongoing wars and terrorism}, \emph{arxiv.org}, May. 2016.
+
+\bibitem{un2} N. F. Johnson \textit{et. al.}, \comillas{From old wars to new wars and global terrorism}, \emph{arxiv.org}, Jun. 2005.
+
+\end{thebibliography}
+
+\appendix
+
+\section{Apéndice: Resultados de la simulación}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{Nu001.png}
+\end{center}
+\caption{\itshape Resultados de la simulación con $\nu=0.01$. La ecuación de la recta es $y=-2.17x+3.55$.}
+\label{Nu001}
+\end{figure}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{Nu01.png}
+\end{center}
+\caption{\itshape Resultados de la simulación con $\nu=0.1$. La ecuación de la recta es $y=-2.25x+3.59$.}
+\label{Nu01}
+\end{figure}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{Nu02.png}
+\end{center}
+\caption{\itshape Resultados de la simulación con $\nu=0.2$. La ecuación de la recta es $y=-2.31x+3.64$.}
+\label{Nu02}
+\end{figure}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{Nu03.png}
+\end{center}
+\caption{\itshape Resultados de la simulación con $\nu=0.3$. La ecuación de la recta es $y=-2.43x+3.70$.}
+\label{Nu03}
+\end{figure}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{Nu04.png}
+\end{center}
+\caption{\itshape Resultados de la simulación con $\nu=0.4$. La ecuación de la recta es $y=-2.55x+3.76$.}
+\label{Nu04}
+\end{figure}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{Nu05.png}
+\end{center}
+\caption{\itshape Resultados de la simulación con $\nu=0.5$. La ecuación de la recta es $y=-2.64x+3.79$.}
+\label{Nu05}
+\end{figure}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{Nu06.png}
+\end{center}
+\caption{\itshape Resultados de la simulación con $\nu=0.6$. La ecuación de la recta es $y=-2.88x+3.89$.}
+\label{Nu06}
+\end{figure}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{Nu07.png}
+\end{center}
+\caption{\itshape Resultados de la simulación con $\nu=0.7$. La ecuación de la recta es $y=-3.12x+4.00$.}
+\label{Nu07}
+\end{figure}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{Nu08.png}
+\end{center}
+\caption{\itshape Resultados de la simulación con $\nu=0.8$. La ecuación de la recta es $y=-3.27x+4.03$.}
+\label{Nu08}
+\end{figure}
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{Nu09.png}
+\end{center}
+\caption{\itshape Resultados de la simulación con $\nu=0.9$. La ecuación de la recta es $y=-3.55x+4.11$.}
+\label{Nu09}
+\end{figure}
+
 
 \end{document}
 
