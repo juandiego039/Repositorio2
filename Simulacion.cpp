@@ -127,6 +127,9 @@ int main(void)
 	int fuerza_max;						 //Vector donde se guarda la fuerza máxima (Parte 6)
     srand(time(NULL));    			     //Semilla aleatoria para la función rand()
     
+    printf ("Total de fuerza: N=%d\n",N);
+    printf ("Total de iteraciones: %d\n",Num_iteraciones);
+    printf ("Probabilidad de fragmentaci\242n: %lf\n",nu);
     
     /* Inicio de las iteraciones */
     for(int iteracion=1;iteracion<=Num_iteraciones;iteracion++)

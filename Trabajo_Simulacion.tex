@@ -55,7 +55,7 @@
 
 \section{Introducción}
 
-\noindent En \cite{un1} y \cite{un2} se describen ciertos patrones que subyacen en guerras y hechos de terrorismo que ocurren en el mundo, aún cuando los conflictos están separados geográficamente. Se describe que una fuerza insurgente tiene una fuerza de ataque $N$ total, la cual se reparte en varias unidades de ataque, las cuales poseen una dinámica de coalición y fragmentación. Entonces las distintas unidades de ataque poseerán diferentes cantidades de fuerza de ataque dependiendo de esta dinámica. La característica que se estudia es la relación exponencial entre el número de unidades de ataque $n_s$ con una fuerza $s$, y la fuerza de ataque $s$. Esta relación posee varios parámetros, entre los cuales está la probabilidad de fragmentación de una unidad $\nu$. La dinámica de las unidades de ataque viene determinada por el siguiente algoritmo \cite{un1}: 
+\noindent En \cite{un1} y \cite{un2} se describen ciertos patrones que subyacen en guerras y hechos de terrorismo que ocurren en el mundo, aún cuando los conflictos están separados geográficamente. Se describe que una fuerza insurgente tiene una fuerza de ataque $N$ total, la cual se reparte en varias unidades de ataque, las cuales poseen una dinámica de coalición y fragmentación. Entonces las distintas unidades de ataque poseerán diferentes cantidades de fuerza de ataque dependiendo de esta dinámica. La característica que se estudia es la relación exponencial entre el número de unidades de ataque $n_s$ con una fuerza $s$, y la fuerza de ataque $s$. Esta relación posee varios parámetros, entre los cuales está la probabilidad de fragmentación de una unidad $\nu$. La dinámica de las unidades de ataque viene determinada por el siguiente algoritmo \cite{un1}:
 
 \begin{enumerate}
   \item Seleccionar una unidad de ataque $i$ aleatoriamente, con probabilidad probabilidad proporcional a su fuerza de ataque $s_i$.
@@ -191,7 +191,7 @@ representa la probabilidad de seleccionar una unidad con índice menor a $i$. Lue
 
 \section{Resultados y análisis}
 
-\noindent Se realizaron simulaciones con $N=10000$, para 10 valores diferentes de $\nu$. Los resultados se muestran en el apéndice. Todas las simulaciones se realizaron en un sistema operativo de 64 bits Intel(R) Core(TM) i3-4160 CPU a 3.60 GHz. Los tiempos de simulación varían entre 15 segundos (con $\nu=0.9$) y 120 segundos (con $\nu=0.01$). La condición inicial de la simulación es
+\noindent Se realizaron simulaciones con $N=10000$, para 10 valores diferentes de $\nu$ y con 20000 iteraciones. Los resultados se muestran en el apéndice. Todas las simulaciones se realizaron en un sistema operativo de 64 bits Intel(R) Core(TM) i3-4160 CPU a 3.60 GHz. Los tiempos de simulación varían entre 15 segundos (con $\nu=0.9$) y 120 segundos (con $\nu=0.01$). La condición inicial de la simulación es
 \begin{displaymath}
   \vec{s} = (10000, 0, 0, 0, 0, ...)
 \end{displaymath}
